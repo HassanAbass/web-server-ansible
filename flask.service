@@ -1,0 +1,47 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          flask_app
+# Required-Start:    $local_fs $remote_fs $network $syslog
+# Required-Stop:     $local_fs $remote_fs $network $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Flask Application
+# Description:       Flask Application
+### END INIT INFO
+
+# Directory where your Flask application is located
+APP_DIR="/opt"
+
+# Path to the Python virtual environment
+VENV_DIR="/usr/bin/python3"
+
+# User and group that should run the Flask application
+USER="root"
+GROUP="root"
+export FLASK_APP=/opt/app.py
+# Command to start the Flask application
+COMMAND="$VENV_DIR -m flask run --host=0.0.0.0"
+
+case "$1" in
+    start)
+        echo "Starting Flask Application..."
+        cd $APP_DIR
+        nohup $COMMAND >> /var/log/flask_app.log 2>&1 &
+        ;;
+    stop)
+        echo "Stopping Flask Application..."
+        pkill -f "$COMMAND"
+        ;;
+    restart)
+        $0 stop
+        sleep 2
+        $0 start
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart}"
+        exit 1
+        ;;
+esac
+
+exit 0
