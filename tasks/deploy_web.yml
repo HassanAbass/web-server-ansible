@@ -4,7 +4,6 @@
     - flask
     - flask-mysql
     - flask_sqlalchemy 
-    
 - name: Copy source code
   copy:
     src: app.py
@@ -22,3 +21,4 @@
 
 - name: start flask service
   shell: update-rc.d flask_app defaults && chmod +x /etc/init.d/flask_app && service flask_app restart
+  

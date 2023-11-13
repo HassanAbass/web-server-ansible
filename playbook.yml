@@ -1,5 +1,5 @@
 - name: Deploy a web application
-  hosts: web
+  hosts: db_web_server
   tasks:
     - name: install python dependencies
       package:
@@ -19,10 +19,6 @@
         - mysql-client
         update_cache: yes
     
-    - name: Start mysql service
-      shell: service mysql start
-
-    - include: tasks/deploy_db.yml
-    - include: tasks/deploy_web.yml
-      
+    - include_tasks: tasks/deploy_db.yml
+    - include_tasks: tasks/deploy_web.yml
 
