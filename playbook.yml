@@ -22,59 +22,7 @@
     - name: Start mysql service
       shell: service mysql start
 
-    - name: Create application database
-      mysql_db:
-        check_implicit_admin: true
-        name: employee_db
-        login_host: localhost
-        login_user: root
-        login_password: Passw0rd
-        login_unix_socket:  /var/run/mysqld/mysqld.sock
-        state: present
-
-    - name: Create a table in the MySQL database
-      mysql_query:
-        login_user: root
-        login_host: localhost
-        login_password: Passw0rd
-        login_unix_socket:  /var/run/mysqld/mysqld.sock
-        login_db: employee_db
-        query: 
-        - "CREATE TABLE IF NOT EXISTS employees (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255));"
-        - "INSERT INTO employees(name) VALUES ('HAB');"
-    
-    - name: Create Dabase User
-      mysql_user:
-        name: db_user
-        password: Passw0rd
-        priv: '*.*:ALL'
-        state: present
-        login_unix_socket:  /var/run/mysqld/mysqld.sock
-        host: '%'
-
-    - name: install python flask dependency
-      pip:
-        name:
-        - flask
-        - flask-mysql
-        - flask_sqlalchemy 
-    
-    - name: Copy source code
-      copy:
-        src: app.py
-        dest: /opt/app.py
-    
-    - name: Copy source code
-      copy:
-        src: app.py
-        dest: /opt/app.py
-        
-    - name: Copy the init service unit file
-      copy:
-        src: flask.service
-        dest: /etc/init.d/flask_app
-
-    - name: start flask service
-      shell: update-rc.d flask_app defaults && chmod +x /etc/init.d/flask_app && service flask_app restart
+    - include: tasks/deploy_db.yml
+    - include: tasks/deploy_web.yml
       
 

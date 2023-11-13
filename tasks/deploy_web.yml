@@ -1,0 +1,24 @@
+- name: install python flask dependency
+  pip:
+    name:
+    - flask
+    - flask-mysql
+    - flask_sqlalchemy 
+    
+- name: Copy source code
+  copy:
+    src: app.py
+    dest: /opt/app.py
+
+- name: Copy source code
+  copy:
+    src: app.py
+    dest: /opt/app.py
+    
+- name: Copy the init service unit file
+  copy:
+    src: flask.service
+    dest: /etc/init.d/flask_app
+
+- name: start flask service
+  shell: update-rc.d flask_app defaults && chmod +x /etc/init.d/flask_app && service flask_app restart
