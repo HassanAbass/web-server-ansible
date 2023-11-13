@@ -6,7 +6,7 @@ FROM ubuntu
 RUN apt-get update --fix-missing && apt-get upgrade -y
 
 # Install OpenSSH Server
-RUN apt-get install -y openssh-server python3-pip
+RUN apt-get install -y openssh-server python3-pip curl nano
 
 # Set up configuration for SSH
 RUN mkdir /var/run/sshd
